@@ -1,0 +1,23 @@
+python manage.py --settings=eshop.my_settings migrate
+python manage.py migrate --settings=eshop.my_settings
+python manage.py createsuperuser --settings=eshop.my_settings
+python manage.py startapp products --settings=eshop.my_settings
+python manage.py makemigrations --settings=eshop.my_settings
+python manage.py shell --settings=eshop.my_settings
+
+
+
+>>> from products.models import Product
+>>> p = Product(name='P1', value=1)
+>>> p.save()
+>>> p = Product.objects.get(name='P1')
+>>> p.name
+u'P1'
+>>> p.name = 'P2'
+>>> p.save()
+
+В случае изменения primary_key при попытке обновить значение этого поля ОРМ джанги создаст новую запись(INSERT) вместо обновления(UPDATE)
+
+
+https://docs.djangoproject.com/en/1.10/howto/legacy-databases/
+python manage.py inspectdb > models.py
