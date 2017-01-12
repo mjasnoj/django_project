@@ -16,3 +16,10 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Comment(models.Model):
+    name = models.CharField('Name', max_length=25)
+    email = models.EmailField('Email')
+    usercom = models.TextField('Comment')
+    product = models.ForeignKey(Product)

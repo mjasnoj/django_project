@@ -6,14 +6,44 @@
 </head>
 <body>
     <h1>My e-shop</h1>
+    <p> {% if user.is_authenticated %}{{user}} <a href="{% url 'logout' %}">logout</a></p>
+    {% else %}
+    <a href="/login">login</a>
+    {% endif %}
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% block content %}
+    <p>
+        <form method="GET">
+            <input type="text" placeholder="Search" name="q" value="{{q}}">
+            <input type="submit" value="Ok">
+        </form>
+    </p>
     <ul>
         {% for product in products %}
-        <li><h2>{{product.name}}</h2>
+        <li><h2><a href="/products/detail/{{product.id}}" >{{product.name}}</a></h2>
         <p>${{product.value}}</p>
         <p>{{product.desc}}</p>
         </li>
+        {% empty %}
+        <p>Nothing to show</p>
         {% endfor %}
     </ul>
-
+    <p>{% if products.has_previous %}
+          <a href="/?page={{products.previous_page_number}}{% if q %}&amp;q={{q}}{% endif %}">&lt;</a>
+        {% endif %}
+        {{products.number}}
+        {% if products.has_next %}
+          <a href="/?page={{products.next_page_number}}{% if q %}&amp;q={{q}}{% endif %}">&gt;</a>
+        {% endif %}
+        <p>Total pages: {{num_pages}}</p>
+    </p>
+    {% endblock %}
 </body>
 </html>

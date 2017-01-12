@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block content %}
+    <h1>Product: {{product.name }}</h1>
+    <p>Price: {{product.value}}</p>
+    <p>Description: {{product.desc}}</p>
+    <h2>Comments</h2>
+    {% for comment in comments %}
+        <p><b>{{comment.name}} ({{comment.email}})</b>{{comment.usercom}}</p>
+    {% empty %}
+    <p>No comments yet</p>
+    {% endfor %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Ok">
+    </form>
+{% endblock %}
