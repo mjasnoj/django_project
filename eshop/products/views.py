@@ -1,4 +1,6 @@
 # encoding: utf-8
+from random import randint
+
 from django.http.response import HttpResponse
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
@@ -10,14 +12,17 @@ from .forms import CommentForm, CommentModelForm
 
 def index(request):
     #return HttpResponse('Hello')
-    all_products = Product.objects.all()
+    all_products = Product.available.all()
+    if 'k' not in request.session:
+        request.session['k'] = randint(1, 10000)
     if 'q' in request.GET:
         all_products = all_products.filter(name__contains=request.GET['q'])
     product = Paginator(all_products, 2).page(request.GET.get('page', 1))
     return render(request, 'index.html', {
         'products': product,
         'num_pages': Paginator(all_products, 2).num_pages,
-        'q': request.GET.get('q', '')
+        'q': request.GET.get('q', ''),
+        'k': request.session['k'],
     })
 
 def detail(request, product_id):

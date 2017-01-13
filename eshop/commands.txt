@@ -21,3 +21,9 @@ u'P1'
 
 https://docs.djangoproject.com/en/1.10/howto/legacy-databases/
 python manage.py inspectdb > models.py
+
+
+https://github.com/mbraak/django-mptt-admin
+https://travis-ci.org/
+https://github.com/django-mptt
+https://github.com/twbs/bootstrap
