@@ -5,8 +5,10 @@ from django.http.response import HttpResponse
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.core.mail import send_mail
 from .models import Product, Comment
 from .forms import CommentForm, CommentModelForm
+from .tasks import send_order
 # Create your views here.
 
 
@@ -50,3 +52,10 @@ def detail(request, product_id):
         'form': form,
         'comments': comments,
     })
+
+
+def order(request, product_id):
+    product = get_object_or_404(Product, pk=int(product_id))
+    send_order.delay(request.user.email, product.name)
+    messages.info(request, 'Order sent')
+    return redirect('/products/detail/{}'.format(product_id))
